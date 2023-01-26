@@ -73,10 +73,29 @@ image_obs.idx_anchor = choose_anchor(image_obs,
                                      lnfluxes=None,
                                      plot=True,
                                      mad_threshold=10)
+
 # %%
 from bepsf.utils import check_anchor
 check_anchor(image_obs)
 plt.ylim(0,100)
-plt.xlim(0,100)
+plt.xlim(0,200)
 plt.show()
+
+# %%
+# Define grid PSF model
+from bepsf.psfmodel import GridePSFModel
+
+psf_full_extent = source_half_extent*2
+dx, dy = 1./5., 1./5.
+gridpsf = GridePSFModel(psf_full_extent, psf_full_extent, dx, dy)
+
+# %%
+from bepsf.infer import optimize
+from bepsf.utils import drop_anchor
+
+res = optimize(gridpsf, image_obs, xyclim=[-source_half_extent, source_half_extent])
+#popt, state = res
+#popt = drop_anchor(popt, image_obs.idx_anchor)
+# %%
+print(image_obs.idx_anchor)
 # %%

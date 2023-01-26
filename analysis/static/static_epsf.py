@@ -22,6 +22,7 @@ plt.show()
 Ny, Nx = np.shape(img)
 image_obs = PixelImage(Nx, Ny)
 image_obs.Z = np.array(img, dtype=float)
+image_obs.Zerr = np.sqrt(image_obs.Z)
 Ntarget = 20
 Nselect = 1
 fac = 0.9955
@@ -64,7 +65,8 @@ plt.ylim(25, 75)
 plt.show()
 
 # %%
-# image_obs.lnfinit = np.log(np.array(fap))
+fap, xap, yap = image_obs.aperture_photometry(xcenters, ycenters, source_half_extent)
+image_obs.lnfinit = np.log(np.array(fap))
 image_obs.xinit = xap
 image_obs.yinit = yap
 image_obs.idx_anchor = choose_anchor(image_obs,

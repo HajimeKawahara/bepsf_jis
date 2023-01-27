@@ -96,8 +96,15 @@ from bepsf.infer import optimize
 from bepsf.utils import drop_anchor
 
 res = optimize(gridpsf, image_obs, xyclim=[-source_half_extent, source_half_extent])
-#popt, state = res
-#popt = drop_anchor(popt, image_obs.idx_anchor)
+popt, state = res
+popt = drop_anchor(popt, image_obs.idx_anchor)
+# %%
+
+from bepsf.utils import check_solution
+fluxes = fap #temporary
+check_solution(image_obs, xcenters, ycenters, fluxes, p=popt)
+plt.savefig("")
+
 # %%
 print(image_obs.idx_anchor)
 # %%

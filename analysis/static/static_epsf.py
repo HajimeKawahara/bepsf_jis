@@ -65,7 +65,7 @@ plt.ylim(25, 75)
 plt.show()
 
 # %%
-fap, xap, yap = image_obs.aperture_photometry(xcenters, ycenters, source_half_extent)
+#fap, xap, yap = image_obs.aperture_photometry(xcenters, ycenters, source_half_extent)
 image_obs.lnfinit = np.log(np.array(fap))
 image_obs.xinit = xap
 image_obs.yinit = yap
@@ -76,6 +76,8 @@ image_obs.idx_anchor = choose_anchor(image_obs,
                                      plot=True,
                                      mad_threshold=10)
 
+# %%
+fap
 # %%
 from bepsf.utils import check_anchor
 check_anchor(image_obs)
@@ -101,9 +103,9 @@ popt = drop_anchor(popt, image_obs.idx_anchor)
 # %%
 
 from bepsf.utils import check_solution
-fluxes = fap #temporary
+fluxes = fap #temporarby
 check_solution(image_obs, xcenters, ycenters, fluxes, p=popt)
-plt.savefig("")
+plt.savefig("check.png")
 
 # %%
 print(image_obs.idx_anchor)

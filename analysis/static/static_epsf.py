@@ -125,14 +125,9 @@ popt = drop_anchor(popt, image_obs.idx_anchor)
 
 from bepsf.utils import check_solution
 fluxes = fap #temporarby
-check_solution(image_obs, xtrue, ytrue, fluxes, p=popt)
-plt.savefig("check.png")
-plt.close()
-
+check_solution(image_obs, xtrue[0:Ntarget], ytrue[0:Ntarget], fluxes, p=popt, savefig_position="pos_a.png")
 fluxes = fap #temporarby
-check_solution(image_obs, ytrue, xtrue, fluxes, p=popt)
-plt.savefig("check_inv.png")
-plt.close()
+check_solution(image_obs, ytrue[0:Ntarget], xtrue[0:Ntarget], fluxes, p=popt, savefig_position="pos_b.png")
 
 # %%
 print(image_obs.idx_anchor)

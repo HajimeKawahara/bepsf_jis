@@ -5,19 +5,36 @@ import matplotlib.pyplot as plt
 from astropy.io import fits
 from bepsf.image import PixelImage
 from jax.config import config
+import pandas as pd
 
 config.update('jax_enable_x64', True)
 
 #static 12 mag image
 static_data = "../../data/public/static_image.12.0.00.fits"
+position_data = "../../data/public/spcsv_20_1968_10_20_12.0.csv"
 
 # %%
+pos = pd.read_csv(position_data, delimiter=",")
+xtrue = pos["x pixel"].values-1
+ytrue = pos["y pixel"].values-1
+
+# %%
+tip=5
+i=21
+xc=xtrue[i]
+yc=ytrue[i]
+
 dat = fits.open(static_data)
 img = (dat[0].data)
-fig = plt.figure(figsize=(20, 20))
+fig = plt.figure(figsize=(4, 4))
 plt.imshow(img)
+plt.plot(xtrue,ytrue,"*",color="red")
+plt.savefig("pixcoord.png")
 plt.show()
+plt.close()
 
+#import sys
+#sys.exit()
 # %%
 Ny, Nx = np.shape(img)
 image_obs = PixelImage(Nx, Ny)
@@ -62,7 +79,9 @@ ax.imshow(np.log10(image_obs.Z), cmap="gray")
 ax.imshow(mask_boundary, alpha=0.2)
 plt.ylim(25, 75)
 #plt.xlim(25,75)
-plt.show()
+plt.savefig("imag.png")
+plt.close()
+#plt.show()
 
 # %%
 #fap, xap, yap = image_obs.aperture_photometry(xcenters, ycenters, source_half_extent)
@@ -83,7 +102,9 @@ from bepsf.utils import check_anchor
 check_anchor(image_obs)
 plt.ylim(0,100)
 plt.xlim(0,200)
+plt.savefig("anchor.png")
 plt.show()
+plt.close()
 
 # %%
 # Define grid PSF model
@@ -104,8 +125,14 @@ popt = drop_anchor(popt, image_obs.idx_anchor)
 
 from bepsf.utils import check_solution
 fluxes = fap #temporarby
-check_solution(image_obs, xcenters, ycenters, fluxes, p=popt)
+check_solution(image_obs, xtrue, ytrue, fluxes, p=popt)
 plt.savefig("check.png")
+plt.close()
+
+fluxes = fap #temporarby
+check_solution(image_obs, ytrue, xtrue, fluxes, p=popt)
+plt.savefig("check_inv.png")
+plt.close()
 
 # %%
 print(image_obs.idx_anchor)
